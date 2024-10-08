@@ -139,4 +139,52 @@ class productController extends Controller
         ];
         return response()->json($data, 200);
     }
+
+    public function updatePartial(Request $request, $id) {
+        $product = Product::find($id);
+
+        if (!$product) {
+            $data = [
+                'message' => 'Producto no encontrado',
+                'status' => 404
+            ];
+            return response()->json($data, 404);
+        }
+
+        $validator = Validator::make($request->all(), [ // Aqui puedo crear las validaciones
+            'name' => 'max:255',
+            'description' => '',
+            'price' => '',
+        ]);
+
+        if ($validator->fails()) {
+            $data = [
+                'message' => 'Error en la validacion de los datos',
+                'errors' => $validator->errors(),
+                'status' => 400
+            ];
+            return response()->json($data, 400);
+        }
+
+        if ($request->has('name')) {
+            $product->name = $request->name;
+        }
+
+        if ($request->has('description')) {
+            $product->description = $request->description;
+        }
+
+        if ($request->has('price')) {
+            $product->price = $request->price;
+        }
+        
+        $product->save();
+        
+        $data = [
+            'message' => 'Producto actualizado',
+            'product' => $product,
+            'status' => 200
+        ];
+        return response()->json($data, 200);
+    }
 }
