@@ -15,8 +15,6 @@ Route::get('/product/{id}', [productController::class, 'show']);
 
 Route::post('/product', [productController::class, 'store']);
 
-Route::put('/product/{id}', function () {
-    return 'Actualizado el producto';
-});
+Route::put('/product/{id}', [productController::class, 'updatePartial']);
 
 Route::delete('/product/{id}', [productController::class, 'delete']);
