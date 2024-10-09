@@ -13,6 +13,17 @@ use App\Http\Controllers\Api\productController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
+use App\Http\Controllers\AuthController;
+
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout']);
+Route::get('user', [AuthController::class, 'getAuthenticatedUser'])->middleware('auth:api');
+
+// Route::middleware(['auth:api'])->group(function () {
+//     Route::get('products', [ProductController::class, 'index']);
+//     // Otras rutas de productos
+// });
 
 Route::get('/product', [productController::class, 'index']);
 
@@ -24,4 +35,8 @@ Route::put('/product/{id}', [productController::class, 'updatePartial']);
 
 Route::delete('/product/{id}', [productController::class, 'delete']);
 
+// Route::middleware(['auth:api'])->group(function () {
+//     Route::get('products', [ProductController::class, 'index']);
+//     // Otras rutas de productos
+// });
 
