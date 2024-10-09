@@ -11,9 +11,9 @@ class productController extends Controller
 {
     
     public function index() {
-        $products = Product::all();
+        $product = Product::all();
 
-        if ($products->isEmpty()) {
+        if ($product->isEmpty()) {
             $data = [
                 'message' => 'No se encontraron productos',
                 'status' => 404,
@@ -21,7 +21,12 @@ class productController extends Controller
             return response()->json($data, 404);
         }
 
-        return response()->json($products, 200);
+        $data = [
+            'data' => $product,
+            'status' => 200
+        ];
+
+        return response()->json($data, 200);
     }
 
     public function store(request $request) {
@@ -56,7 +61,7 @@ class productController extends Controller
         }
         
         $data = [
-            'message' => $product,
+            'data' => $product,
             'status' => 201,
         ];
         return response()->json($data, 201);
@@ -74,7 +79,7 @@ class productController extends Controller
         }
         
         $data = [
-            'message' => $product,
+            'data' => $product,
             'status' => 200
         ];
         return response()->json($data, 200);
@@ -94,7 +99,7 @@ class productController extends Controller
         $product->delete();
         
         $data = [
-            'message' => 'Producto eliminado',
+            'data' => 'Producto eliminado',
             'status' => 200
         ];
         return response()->json($data, 200);
@@ -133,7 +138,7 @@ class productController extends Controller
         $product->save();
         
         $data = [
-            'message' => 'producto actualizado',
+            'data' => 'producto actualizado',
             'product' => $product,
             'status' => 200
         ];
