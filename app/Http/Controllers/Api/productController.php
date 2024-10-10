@@ -10,50 +10,111 @@ use Illuminate\Support\Facades\Validator;
 class productController extends Controller
 {
     
-    public function index() {
-        $product = Product::all();
+    // public function index() {
+    //     $product = Product::all();
 
-        if ($product->isEmpty()) {
+    //     if ($product->isEmpty()) {
+    //         $data = [
+    //             'message' => 'No se encontraron productos',
+    //             'status' => 404,
+    //         ];
+    //         return response()->json($data, 404);
+    //     }
+
+    //     $data = [
+    //         'products' => $product,
+    //     ];
+
+    //     return response()->json($data, 200);
+    // }
+
+    public function index() {
+        // Obtener los productos del usuario autenticado
+        $products = Product::where('user_id', auth()->id())->get();
+    
+        if ($products->isEmpty()) {
             $data = [
                 'message' => 'No se encontraron productos',
                 'status' => 404,
             ];
             return response()->json($data, 404);
         }
-
+    
         $data = [
-            'products' => $product,
+            'products' => $products,
         ];
-
+    
         return response()->json($data, 200);
     }
+    
+    // public function store(request $request) {
 
-    public function store(request $request) {
+    //     $validator = Validator::make($request->all(), [ // Aqui puedo crear las validaciones
+    //         'name' => 'required',
+    //         'description' => 'required',
+    //         'price' => 'required',
+    //     ]);
 
-        $validator = Validator::make($request->all(), [ // Aqui puedo crear las validaciones
+    //     if ($validator->fails()) {
+    //         $data = [
+    //             'message' => 'Error en la validacion de los datos',
+    //             'errors' => $validator->errors(),
+    //             'status' => 400
+    //         ];
+    //         return response()->json($data, 400);
+    //     }
+
+    //     $product = Product::create([
+    //         'name' => $request->name,
+    //         'description' => $request->description,
+    //         'price' => $request->price,
+    //     ]);
+
+    //     if (!$product) {
+    //         $data = [
+    //             'message' => 'Error al crear product',
+    //             'status' => 500
+    //         ];
+    //         return response()->json($data, 500);
+    //     }
+        
+    //     $data = [
+    //         'data' => $product,
+    //         'status' => 201,
+    //     ];
+    //     return response()->json($data, 201);
+    // }
+
+    public function store(Request $request) {
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'description' => 'required',
-            'price' => 'required',
+            'price' => 'required|numeric',
         ]);
-
+    
         if ($validator->fails()) {
             $data = [
-                'message' => 'Error en la validacion de los datos',
+                'message' => 'Error en la validación de los datos',
                 'errors' => $validator->errors(),
                 'status' => 400
             ];
             return response()->json($data, 400);
         }
-
+    
+        // Obtener el ID del usuario autenticado
+        $userId = auth()->id(); // Esto devuelve el ID del usuario autenticado
+    
+        // Crear el producto con el user_id
         $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
+            'user_id' => $userId, // Asigna el user_id
         ]);
-
+    
         if (!$product) {
             $data = [
-                'message' => 'Error al crear product',
+                'message' => 'Error al crear el producto',
                 'status' => 500
             ];
             return response()->json($data, 500);
