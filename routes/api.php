@@ -20,20 +20,24 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 Route::get('user', [AuthController::class, 'getAuthenticatedUser'])->middleware('auth:api');
 
-// Route::middleware(['auth:api'])->group(function () {
-//     Route::get('products', [ProductController::class, 'index']);
-//     // Otras rutas de productos
-// });
+// Protegiendo las rutas de productos con middleware auth:api
+Route::middleware(['auth:api'])->group(function () {
+    Route::get('/product', [productController::class, 'index']);
+    Route::get('/product/{id}', [productController::class, 'show']);
+    Route::post('/product', [productController::class, 'store']);
+    Route::put('/product/{id}', [productController::class, 'updatePartial']);
+    Route::delete('/product/{id}', [productController::class, 'delete']);
+});
 
-Route::get('/product', [productController::class, 'index']);
+// Route::get('/product', [productController::class, 'index']);
 
-Route::get('/product/{id}', [productController::class, 'show']);
+// Route::get('/product/{id}', [productController::class, 'show']);
 
-Route::post('/product', [productController::class, 'store']);
+// Route::post('/product', [productController::class, 'store']);
 
-Route::put('/product/{id}', [productController::class, 'updatePartial']);
+// Route::put('/product/{id}', [productController::class, 'updatePartial']);
 
-Route::delete('/product/{id}', [productController::class, 'delete']);
+// Route::delete('/product/{id}', [productController::class, 'delete']);
 
 // Route::middleware(['auth:api'])->group(function () {
 //     Route::get('products', [ProductController::class, 'index']);
