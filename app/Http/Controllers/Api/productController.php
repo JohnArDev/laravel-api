@@ -22,8 +22,7 @@ class productController extends Controller
         }
 
         $data = [
-            'data' => $product,
-            'status' => 200
+            'products' => $product,
         ];
 
         return response()->json($data, 200);
@@ -78,10 +77,7 @@ class productController extends Controller
             return response()->json($data, 404);
         }
         
-        $data = [
-            'data' => $product,
-            'status' => 200
-        ];
+        $data = $product;
         return response()->json($data, 200);
     }
 
